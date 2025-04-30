@@ -9,4 +9,5 @@ public class SensorInput {
     private String location;
     private String protocol;
     private String model;
+    private Boolean enabled;
 }
