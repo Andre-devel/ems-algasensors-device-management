@@ -1,16 +1,12 @@
 package com.andredevel.algasensors.device.management.api.model;
 
 import io.hypersistence.tsid.TSID;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class Sensor {
+public class SensorOutput {
     private TSID id;
     private String name;
     private String ip;
