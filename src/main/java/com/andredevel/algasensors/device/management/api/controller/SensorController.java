@@ -1,5 +1,6 @@
 package com.andredevel.algasensors.device.management.api.controller;
 
+import com.andredevel.algasensors.device.management.api.client.SensorMonitoringClient;
 import com.andredevel.algasensors.device.management.api.model.SensorInput;
 import com.andredevel.algasensors.device.management.api.model.SensorOutput;
 import com.andredevel.algasensors.device.management.common.IdGenerator;
@@ -14,7 +15,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,6 +30,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class SensorController {
     
     private final SensorRepository sensorRepository;
+    private final SensorMonitoringClient sensorMonitoringClient;
     
     @GetMapping
     public Page<SensorOutput> search(@PageableDefault Pageable pageable) {
@@ -44,6 +45,8 @@ public class SensorController {
         currentSensor.setEnabled(true);
         
         sensorRepository.save(currentSensor);
+
+        sensorMonitoringClient.enableMonitoring(sensorId);
     }
 
     @DeleteMapping("{sensorId}/enable")
@@ -53,6 +56,8 @@ public class SensorController {
         currentSensor.setEnabled(false);
 
         sensorRepository.save(currentSensor);
+
+        sensorMonitoringClient.disableMonitoring(sensorId);
     }
 
     @PutMapping("{sensorId}")
@@ -78,6 +83,8 @@ public class SensorController {
         Sensor currentSensor = findSensorByID(sensorId);
         
         sensorRepository.delete(currentSensor);
+        
+        sensorMonitoringClient.disableMonitoring(sensorId);
     }
     
     @GetMapping("{sensorId}")
